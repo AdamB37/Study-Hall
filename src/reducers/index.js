@@ -1,12 +1,12 @@
-import getFlashcards from '../data/flashcards'
+// import getFlashcards from '../data/flashcards'
+//
+// const init = () => ({
+//    flashcards: getFlashcards(),
+//    index: 0,
+//    showAnswer: false
+// })
 
-const init = () => ({
-   flashcards: getFlashcards(),
-   index: 0,
-   showAnswer: false
-})
-
-const flashcards = (state = init(), action = {}) => {
+const flashcards = (state, action = {}) => {
    switch (action.type) {
       case 'REVEAL_ANSWER':
          return {
@@ -20,8 +20,16 @@ const flashcards = (state = init(), action = {}) => {
             index: state.index + 1,
             showAnswer: false
          }
+      case 'REQUEST_FLASHCARDS':
+         return {...state, loading: true}
       case 'RESTART':
-         return init()
+      case 'RECEIVE_FLASHCARDS':
+         return {
+            index: 0,
+            showAnswer: false,
+            flashcards: action.json,
+            loading: false
+         }
       default:
          return state
    }
