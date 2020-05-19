@@ -1,12 +1,8 @@
-// import getFlashcards from '../data/flashcards'
-//
-// const init = () => ({
-//    flashcards: getFlashcards(),
-//    index: 0,
-//    showAnswer: false
-// })
+import { combineReducers } from 'redux'
+import { useHistory } from "react-router-dom";
 
-const flashcards = (state, action = {}) => {
+
+const studyFlashcards = (state = {}, action) => {
    switch (action.type) {
       case 'REVEAL_ANSWER':
          return {
@@ -31,8 +27,51 @@ const flashcards = (state, action = {}) => {
             loading: false
          }
       default:
-         return state
+         return {
+            index: state.index || 0,
+            showAnswer: state.showAnswer || false,
+            flashcards: state.flashcards || []
+         }
    }
 }
 
-export default flashcards
+const flashcardIndex = (state = {}, action) => {
+   switch (action.type) {
+      case 'REQUEST_FLASHCARDS':
+         return {...state, loading: true}
+      case 'RECEIVE_FLASHCARDS':
+         console.log('RECEIVE_FLASHCARDS from flashcardIndex')
+         return {
+            flashcards: action.json,
+            loading: false
+         }
+      case 'NEXT_PAGE':
+      case 'PREV_PAGE':
+      default:
+         const flashcards = state.flashcards || []
+         return { flashcards }
+   }
+}
+
+const editFlashcard = (state = {}, action) => {
+   switch(action.type) {
+      case 'SAVE_PROGRESS':
+         return {
+            flashcard: {...action.flashcard}
+         }
+         break
+      case 'POSTED_FLASHCARD':
+      default:
+         const flashcard = state.flashcard || {
+            answer: '',
+            question: ''
+         }
+         return { flashcard }
+   }
+}
+
+export default combineReducers({
+   studyFlashcards,
+   flashcardIndex,
+   editFlashcard
+})

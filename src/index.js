@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './components/App';
 import rootReducer from './reducers'
-import { fetchFlashcards } from './actions'
+import { getFlashcards } from './actions'
 
 
 
@@ -24,4 +24,4 @@ ReactDOM.render(
    document.getElementById('root')
 );
 
-store.dispatch(fetchFlashcards()).then(() => console.log(store.getState()))
+store.dispatch(getFlashcards()).then(() => console.log(store.getState()))

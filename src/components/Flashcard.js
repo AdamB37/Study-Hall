@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Spinner from 'react-bootstrap/Spinner'
+import { useDispatch, useSelector } from "react-redux"
+import { revealAnswer, nextQuestion, restart } from '../actions'
 
 
-const Flashcard = ({showAnswer, visibleFlashcard, lastCard, clickHandlers}) => {
+const Flashcard = (props) => {
+   const state = useSelector(state => state.studyFlashcards)
+   const dispatch = useDispatch()
+   console.log('studyFlashcards state',state)
+   const {showAnswer, flashcards, index} = state
+   const visibleFlashcard = flashcards[index]
+   const lastCard = flashcards.length - 1 === index
    if(!visibleFlashcard) {
       return (
          <Spinner animation="border" role="status">
@@ -12,8 +20,7 @@ const Flashcard = ({showAnswer, visibleFlashcard, lastCard, clickHandlers}) => {
          </Spinner>
       )
    }
-   let { revealAnswer, nextQuestion, restart } = clickHandlers
-   let { question, answer } = visibleFlashcard
+   const { question, answer } = visibleFlashcard
    let onClick, buttonText
 
    if(showAnswer) {
@@ -23,8 +30,10 @@ const Flashcard = ({showAnswer, visibleFlashcard, lastCard, clickHandlers}) => {
       onClick = revealAnswer
       buttonText = "Show Answer"
    }
+
+   const className = "w-50 mt-4 text-center rounded shadow-lg"
    return (
-      <Card className="text-center">
+      <Card className={className}>
          <Card.Header>
             <Card.Title>
                {showAnswer ? "Answer" : "Question"}
@@ -34,7 +43,7 @@ const Flashcard = ({showAnswer, visibleFlashcard, lastCard, clickHandlers}) => {
             <Card.Text>
                {showAnswer ? answer : question}
             </Card.Text>
-            <Button variant="primary" onClick={onClick}>
+            <Button variant="primary" onClick={() => dispatch(onClick)}>
                {buttonText}
             </Button>
          </Card.Body>

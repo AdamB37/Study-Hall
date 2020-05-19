@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Table from 'react-bootstrap/Table'
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import { useDispatch, useSelector } from "react-redux"
 
-const FlashcardTable = ({flashcards}) => {
+const FlashcardTable = (props) => {
+   const state = useSelector(state => state.flashcardIndex)
+   const flashcards = state.flashcards
    return (
       <Table striped bordered hover>
          <thead>
